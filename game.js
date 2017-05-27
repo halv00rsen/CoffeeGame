@@ -47,6 +47,7 @@ class Game {
     this.canvas.width = 500;
     // this.canvas.height = window.innerHeight;
     // this.canvas.width = window.innerWidth;
+    this.start_counter = 0;
     this.height = 500;
     this.width = 500;
     this.left_key = false;
@@ -85,18 +86,39 @@ class Game {
     this.gameCounter = new GameCounter();
     this.sea = new CoffeeSea(this.width, this.height);
     this.counter = 0;
+    this.lowest_drop = undefined;
     // this.drops = [];
     this.start();
   }
 
   start() {
-    if (!this.game_init) {
+    if (!this.game_init || this.start_counter != 0) {
       return;
     }
-    this.is_running = true;
-    this.runInterval = setInterval(() => {
+    this.start_counter = 4;
+    const counter_func = () => {
+      this.start_counter--;
+      if (this.start_counter === 0) {
+        return;
+      }
       this.run();
-    }, 20);
+      this.context.beginPath();
+      this.context.font = "60px Georgia";
+      this.context.fillStyle = "red";
+      this.context.fillText("" + this.start_counter, this.canvas.width / 2 - 50, this.canvas.height / 2 - 50);
+    }
+    this.start_counter_interval = setInterval(() => {
+      counter_func();
+      if (this.start_counter === 0) {
+        clearInterval(this.start_counter_interval);
+        this.is_running = true;
+        this.runInterval = setInterval(() => {
+          this.run();
+        }, 20);
+      }
+
+    }, 1000);
+    counter_func();
   }
 
   run() {
@@ -196,6 +218,8 @@ class Game {
     }
     this.is_running = false;
     clearInterval(this.runInterval);
+    clearInterval(this.start_counter_interval);
+    this.start_counter = 0;
     this.context.beginPath();
     this.context.fillStyle = "rgba(255, 255, 255, 0.5)";
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -224,7 +248,7 @@ class CoffeeCup {
 
 
   add_coffe_tear() {
-    if (this.has === 5) {
+    if (this.has === this.can_hold) {
       return false;
     }
     this.has++;
@@ -356,6 +380,13 @@ class CoffeeSea {
 }
 
 const game = new Game();
+
+function update_width() {
+  const e = document.getElementById("canvas-width");
+  const width = e.options[e.selectedIndex].value;
+  console.log(width);
+  game.canvas.width = width;
+}
 
 // function start() {
 //   game.start();
