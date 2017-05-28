@@ -2,9 +2,9 @@
 class UserInput {
   constructor(listener) {
     window.addEventListener("keydown", e => {
-      if (e.keyCode === 37) {
+      if (e.keyCode === 37 || e.keyCode === 72) {
         listener.left_key = true;
-      } else if (e.keyCode === 39) {
+      } else if (e.keyCode === 39 || e.keyCode === 76) {
         listener.right_key = true;
       } else if (e.keyCode === 27) { //Escape key
         listener.pause();
@@ -17,9 +17,9 @@ class UserInput {
     });
 
     window.addEventListener("keyup", e => {
-      if (e.keyCode === 37) {
+      if (e.keyCode === 37 || e.keyCode === 72) {
         listener.left_key = false;
-      } else if (e.keyCode === 39) {
+      } else if (e.keyCode === 39 || e.keyCode === 76) {
         listener.right_key = false;
       }  
     });

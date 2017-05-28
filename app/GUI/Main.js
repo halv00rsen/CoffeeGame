@@ -7,6 +7,8 @@ import {
 } from "../constants";
 
 import CoffeeCupGUI from "./elements/CoffeeCupGUI";
+import CoffeePotGUI from "./elements/CoffeePotGUI";
+import CoffeeDropGUI from "./elements/CoffeeDropGUI";
 import PauseScreen from "./PauseScreen";
 
 class Main {
@@ -37,7 +39,12 @@ class Main {
 
     const rel = this.get_relative_size();
 
+    this.context.fillStyle = "#c4daff";
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
     this.coffee_cup.paint(this.context, rel);
+    this.coffee_pot.paint(this.context, rel);
+    this.lowest_drop && this.lowest_drop.paint(this.context, rel);
   }
 
 
@@ -59,9 +66,28 @@ class Main {
 
   new_game(logic) {
     console.log("new game gui");
+    this.lowest_drop = undefined;
     this.coffee_cup = new CoffeeCupGUI();
+    this.coffee_pot = new CoffeePotGUI();
     logic.coffee_cup.add_listener(this.coffee_cup);
+    logic.coffee_pot.add_listener(this.coffee_pot);
   }
+
+
+  add_new_drop(drop) {
+    const gui_drop = new CoffeeDropGUI(drop.x);
+    drop.add_listener(gui_drop);
+    if (this.lowest_drop) {
+      this.lowest_drop.set_child(gui_drop);
+    } else {
+      this.lowest_drop = gui_drop;
+    }
+  }
+
+  remove_last_drop() {
+    this.lowest_drop = this.lowest_drop.child_drop;
+  }
+
 }
 
 export default Main;

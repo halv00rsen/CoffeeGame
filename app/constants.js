@@ -9,6 +9,8 @@ export const cup_fills = 3;
 export const coffee_cup_height = 30;
 export const coffee_cup_width = 50;
 
+export const coffee_pot_width = 30;
+
 // GUI constants
 
 export let canvas_width = 500;
