@@ -1,5 +1,6 @@
 
 import UserInput from "./UserInput";
+import { logic_game_speed } from "./constants";
 
 class Game {
   constructor(app, gui) {
@@ -23,19 +24,28 @@ class Game {
   }
 
   start () {
-    console.log("hehe");
-    clearInterval(this.game_interval);
+    if (this.is_running) {
+      return;
+    }
+    clearInterval(this.logic_interval);
+    clearInterval(this.gui_interval);
+    this.is_running = true;
     this.gui.is_pause = false;
+    console.log("GameRun: " + (20 / logic_game_speed));
     this.logic_interval = setInterval(() => {
       this.app.run(this.left_key, this.right_key);
-    }, 20);
+    }, 20 / logic_game_speed);
     this.gui_interval = setInterval(() => {
       this.gui.paint_graphics();
-    }, 20);
+    }, 5);
   }
 
 
   pause() {
+    if (!this.is_running) {
+      return;
+    }
+    this.is_running = false;
     clearInterval(this.gui_interval);
     clearInterval(this.logic_interval);
     this.gui.activate_pause_screen();

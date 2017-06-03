@@ -4,7 +4,8 @@ import {
   cup_fills, 
   logic_heigth,
   coffee_cup_width,
-  coffee_cup_height
+  coffee_cup_height,
+  coffee_color
 } from "../../constants";
 
 class CoffeeCupGUI extends CoffeeCupListener {
@@ -16,7 +17,7 @@ class CoffeeCupGUI extends CoffeeCupListener {
 
   paint(ctx, rel) {
     ctx.beginPath();
-    ctx.fillStyle = "brown";
+    ctx.fillStyle = coffee_color;
     ctx.fillRect(this.x * rel.x, (this.y + coffee_cup_height / cup_fills * (cup_fills - this.tears)), 
                  coffee_cup_width * rel.x, (coffee_cup_height - (coffee_cup_height / cup_fills * (cup_fills - this.tears))) * rel.y);
     ctx.beginPath();

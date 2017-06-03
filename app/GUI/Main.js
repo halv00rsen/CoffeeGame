@@ -9,11 +9,17 @@ import {
 import CoffeeCupGUI from "./elements/CoffeeCupGUI";
 import CoffeePotGUI from "./elements/CoffeePotGUI";
 import CoffeeDropGUI from "./elements/CoffeeDropGUI";
+import CoffeeSeaGUI from "./elements/CoffeeSeaGUI";
+
+import InformationText from "./InformationText";
 import PauseScreen from "./PauseScreen";
 
-class Main {
+import { ApplicationListener } from "../logic/Application";
+
+class Main extends ApplicationListener {
 
 	constructor(canvas) {
+    super();
 		canvas.height = height;
 		canvas.width = width;
 		this.canvas = canvas;
@@ -44,6 +50,8 @@ class Main {
 
     this.coffee_cup.paint(this.context, rel);
     this.coffee_pot.paint(this.context, rel);
+    this.coffee_sea.paint(this.context, rel);
+    this.info_text.paint(this.context, rel);
     this.lowest_drop && this.lowest_drop.paint(this.context, rel);
   }
 
@@ -69,8 +77,16 @@ class Main {
     this.lowest_drop = undefined;
     this.coffee_cup = new CoffeeCupGUI();
     this.coffee_pot = new CoffeePotGUI();
+    this.coffee_sea = new CoffeeSeaGUI();
+    this.info_text = new InformationText();
     logic.coffee_cup.add_listener(this.coffee_cup);
     logic.coffee_pot.add_listener(this.coffee_pot);
+    logic.coffee_sea.add_listener(this.coffee_sea);
+  }
+
+
+  update_information_text(misses, fills) {
+    this.info_text.set_data(misses, fills);
   }
 
 
@@ -84,7 +100,7 @@ class Main {
     }
   }
 
-  remove_last_drop() {
+  remove_lowest_tear() {
     this.lowest_drop = this.lowest_drop.child_drop;
   }
 

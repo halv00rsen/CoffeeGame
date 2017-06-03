@@ -1,4 +1,6 @@
 
+import { logic_game_speed } from "../constants";
+
 const start_y = 35;
 
 export class CoffeeDropListener {
@@ -17,7 +19,8 @@ class CoffeeDrop {
   constructor(x) {
     this.y = start_y;
     this.x = x;
-    this.speed = 3;
+    this.speed = 3 / logic_game_speed;
+    console.log("CoffeeDropSpeed: " + this.speed);
     this.child_drop = undefined;
     this.listeners = [];
   }
@@ -39,7 +42,6 @@ class CoffeeDrop {
 
   set_child(child) {
     if (this.child_drop) {
-      console.log("neida");
       this.child_drop.set_child(child);
     } else {
       this.child_drop = child;

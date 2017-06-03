@@ -1,12 +1,18 @@
 
-import { logic_width, logic_height, coffee_pot_width } from "../constants";
+import { 
+  logic_width, 
+  logic_height, 
+  coffee_pot_width, 
+  logic_game_speed 
+} from "../constants";
 
 class CoffeePot {
   constructor() {
     this.x = logic_width / 2;
     this.y = 10;
     this.move_to_x = logic_width / 2;
-    this.speed = 3;
+    this.speed = 3 / logic_game_speed;
+    console.log("CoffeePotSpeed: " + this.speed);
     this.listeners = [];
   }
 
