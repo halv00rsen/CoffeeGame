@@ -2,6 +2,9 @@
 import UserInput from "./UserInput";
 import { logic_game_speed } from "./constants";
 
+// import * as io from 'socket.io-client';
+import io from "socket.io-client";
+
 class Game {
   constructor(app, gui) {
     this.app = app;
@@ -10,12 +13,21 @@ class Game {
     this.left_key = false;
     this.right_key = false;
     this.is_running = false;
+    this.game_loaded = false;
     new UserInput(this);
+
+    this.socket = io("http://localhost:3000");
+    this.socket.on("connect", () => {
+      console.log("connected.");
+      console.log(this.socket.id);
+
+    });
   }
 
   new_game() {
     console.log("New game");
     // this.pause();
+    this.game_loaded = true;
     clearInterval(this.game_interval);
     this.is_running = false;
     this.game_init = true;
@@ -24,7 +36,7 @@ class Game {
   }
 
   start () {
-    if (this.is_running) {
+    if (this.is_running || !this.game_loaded) {
       return;
     }
     clearInterval(this.logic_interval);

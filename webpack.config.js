@@ -27,5 +27,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './app/index.html',
     })
-  ]
+  ],
+  devServer: {
+    // host: "0.0.0.0",
+    port: "1234"
+    // disableHostCheck: true
+  }
 };

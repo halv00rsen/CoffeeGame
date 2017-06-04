@@ -23,6 +23,7 @@ class CoffeeCupGUI extends CoffeeCupListener {
     ctx.beginPath();
     ctx.fillStyle = "black";
     ctx.strokeRect(this.x * rel.x, this.y * rel.y, coffee_cup_width * rel.x, coffee_cup_height * rel.y);
+    
   }
 
 }

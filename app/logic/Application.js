@@ -12,6 +12,8 @@ import CoffeePot from "./CoffeePot";
 import CoffeeDrop from "./CoffeeDrop";
 import CoffeeSea from "./CoffeeSea";
 
+import { types as drop_types } from "./CoffeeDrop";
+
 export class ApplicationListener {
   constructor() {
 
@@ -70,7 +72,8 @@ class Application {
 
     this.game_counter++;
     if (this.game_counter % (75 * logic_game_speed) === 0) {
-      const drop = new CoffeeDrop(this.coffee_pot.x);
+      const type = Math.random() > 0.8 ? drop_types.sick : drop_types.normal;
+      const drop = new CoffeeDrop(this.coffee_pot.x, type);
       if (this.lowest_drop) {
         this.lowest_drop.set_child(drop);
       } else {

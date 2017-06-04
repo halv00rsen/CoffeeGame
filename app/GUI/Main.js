@@ -91,7 +91,7 @@ class Main extends ApplicationListener {
 
 
   add_new_drop(drop) {
-    const gui_drop = new CoffeeDropGUI(drop.x);
+    const gui_drop = new CoffeeDropGUI(drop.x, drop.type);
     drop.add_listener(gui_drop);
     if (this.lowest_drop) {
       this.lowest_drop.set_child(gui_drop);
