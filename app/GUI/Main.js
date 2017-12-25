@@ -6,9 +6,11 @@ import {
   logic_height
 } from "../constants";
 
+import { types } from "../logic/CoffeeDrop";
+
 import CoffeeCupGUI from "./elements/CoffeeCupGUI";
 import CoffeePotGUI from "./elements/CoffeePotGUI";
-import CoffeeDropGUI from "./elements/CoffeeDropGUI";
+import CoffeeDropGUI from "./elements/NewCoffeeDropGUI";
 import CoffeeSeaGUI from "./elements/CoffeeSeaGUI";
 
 import InformationText from "./InformationText";
@@ -20,8 +22,19 @@ class Main extends ApplicationListener {
 
 	constructor(canvas) {
     super();
-		canvas.height = height;
-		canvas.width = width;
+		// canvas.height = height;
+    // canvas.width = width;
+    // const win_height = window.innerHeight - 50;
+    // const win_width = window.innerWidth - 50;
+
+    // resize_canvas();
+    // console.log(canvas.height + "  " + canvas.width);
+    this.active = false;
+
+    window.addEventListener("resize", this.resize_canvas, false);
+    canvas.width = 0;
+    canvas.height = 0;
+    // console.log(win_height + "  " + win_width);
 		this.canvas = canvas;
 		this.context = canvas.getContext("2d");
 		this.context.fillStyle = "black";
@@ -38,8 +51,20 @@ class Main extends ApplicationListener {
     }
   }
 
+  resize_canvas() {
+    const win_height = window.innerHeight - 50;
+    const win_width = window.innerWidth - 50; 
+    this.canvas.height = Math.min(win_height, win_width);
+    this.canvas.width = Math.min(win_height, win_width);
+    this.paint_graphics();
+  }
+
 
   paint_graphics() {
+
+    if (!this.active) {
+      return;
+    }
 
     this.clear();
 
@@ -51,8 +76,12 @@ class Main extends ApplicationListener {
     this.coffee_cup.paint(this.context, rel);
     this.coffee_pot.paint(this.context, rel);
     this.coffee_sea.paint(this.context, rel);
+    for (let shot of this.new_shots) {
+      shot.paint(this.context, rel);
+    }
+
     this.info_text.paint(this.context, rel);
-    this.lowest_drop && this.lowest_drop.paint(this.context, rel);
+    // this.lowest_drop && this.lowest_drop.paint(this.context, rel);
   }
 
 
@@ -75,6 +104,7 @@ class Main extends ApplicationListener {
   new_game(logic) {
     console.log("new game gui");
     this.lowest_drop = undefined;
+    this.new_shots = [];
     this.coffee_cup = new CoffeeCupGUI();
     this.coffee_pot = new CoffeePotGUI();
     this.coffee_sea = new CoffeeSeaGUI();
@@ -82,6 +112,7 @@ class Main extends ApplicationListener {
     logic.coffee_cup.add_listener(this.coffee_cup);
     logic.coffee_pot.add_listener(this.coffee_pot);
     logic.coffee_sea.add_listener(this.coffee_sea);
+    this.active = true;
   }
 
 
@@ -97,6 +128,20 @@ class Main extends ApplicationListener {
       this.lowest_drop.set_child(gui_drop);
     } else {
       this.lowest_drop = gui_drop;
+    }
+  }
+
+  set_shots(shots) {
+    this.new_shots = [];
+    for (let drop of shots) {
+      let effect;
+      if (drop["down"]) {
+        effect = types["normal"];
+      } else {
+        effect = types["sick"];
+      }
+      const hehe = new CoffeeDropGUI(drop["x"], drop["y"], effect);
+      this.new_shots.push(hehe);
     }
   }
 

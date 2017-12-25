@@ -20,6 +20,13 @@ class CoffeePot {
     this.listeners.push(l);
   }
 
+  set_data(x) {
+    this.x = x;
+    for (let l of this.listeners) {
+      l.update_vertical(this.x);
+    }
+  }
+
   move() {
     if (Math.abs(this.move_to_x - this.x) < 10) {
       let x = Math.floor((Math.random() * (logic_width - coffee_pot_width)) + 1);

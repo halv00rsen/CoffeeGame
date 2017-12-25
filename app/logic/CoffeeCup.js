@@ -96,6 +96,13 @@ class CoffeeCup {
     }
   }
 
+  set_data(pos) {
+    this.x = pos;
+    for (let l of this.listeners) {
+      l.update_position(this.x);
+    }
+  }
+
   move() {
     this.x += this.right_speed - this.left_speed;
     if (this.x < 0) {

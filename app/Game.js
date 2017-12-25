@@ -2,8 +2,11 @@
 import UserInput from "./UserInput";
 import { logic_game_speed } from "./constants";
 
+import { _ } from "underscore";
+
 // import * as io from 'socket.io-client';
 import io from "socket.io-client";
+// import { clearInterval } from "timers";
 
 class Game {
   constructor(app, gui) {
@@ -12,16 +15,30 @@ class Game {
 
     this.left_key = false;
     this.right_key = false;
+    this.space_key = false;
     this.is_running = false;
     this.game_loaded = false;
+    this.last_used_data = {};
     new UserInput(this);
 
-    this.socket = io("http://localhost:3000");
+    // this.socket = io("http://localhost:3000");
+    this.socket = io("http://192.168.1.91:3000");
+    // this.socket = io("http://172.20.10.2:3000");
     this.socket.on("connect", () => {
       console.log("connected.");
       console.log(this.socket.id);
 
     });
+  }
+
+  set_data(data) {
+    this.app.set_server_data(data);
+  }
+
+  teardown() {
+    clearInterval(this.logic_interval);
+    clearInterval(this.gui_interval);
+    this.is_running = false;
   }
 
   new_game() {
@@ -32,6 +49,8 @@ class Game {
     this.is_running = false;
     this.game_init = true;
     this.app.new_game();
+    this.gui.active = true;
+    this.gui.resize_canvas();
     this.start();
   }
 
@@ -44,12 +63,24 @@ class Game {
     this.is_running = true;
     this.gui.is_pause = false;
     console.log("GameRun: " + (20 / logic_game_speed));
+    // this.logic_interval = setInterval(() => {
+    //   this.app.run(this.left_key, this.right_key);
+    // }, 20 / logic_game_speed);
     this.logic_interval = setInterval(() => {
-      this.app.run(this.left_key, this.right_key);
-    }, 20 / logic_game_speed);
+      const data = {
+        "left": this.left_key,
+        "right": this.right_key,
+        "space": this.space_key
+      }
+      if (!_.isEqual(data, this.last_used_data)) {
+        // console.log("equal");
+        this.socket.emit("game_data", data);
+        this.last_used_data = data;
+      }
+    }, 50);
     this.gui_interval = setInterval(() => {
       this.gui.paint_graphics();
-    }, 5);
+    }, 10);
   }
 
 
@@ -57,10 +88,10 @@ class Game {
     if (!this.is_running) {
       return;
     }
-    this.is_running = false;
-    clearInterval(this.gui_interval);
-    clearInterval(this.logic_interval);
-    this.gui.activate_pause_screen();
+    // this.is_running = false;
+    // clearInterval(this.gui_interval);
+    // clearInterval(this.logic_interval);
+    // this.gui.activate_pause_screen();
   }
 
 

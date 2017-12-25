@@ -3,13 +3,24 @@
 <head>
 	<title>KaffeKaffeKaffe</title>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* * { margin:0; padding:0; } 
+
+    html, body { width:100%; height:100%; }*/
+
+    /* canvas { display:block; } */
+    .center {
+      margin: auto;
+      width: 90%;
+    }
+  </style>
 </head>
 <body>
 <div id="app">
-  <div style="display: inline-block;">
-  	<canvas id="game">
-  		
+  <div class="center">
+  	<canvas id="game" hidden>
+      
   	</canvas>
   </div>
   <div style="display: inline-block;">
@@ -19,9 +30,23 @@
       </ul>
     </div>
     <div>
+      <div style="display: inline-block">
+        Logged in: <span id="logged-in">no</span>
+      </div>
+      <div>
+        Logged in as: <span id="username"></span>
+      </div>
+      <div>
+        Opponent: <span id="opponent"></span>
+      </div>
+    </div>
+    <div>
       <input id="inp-username" type="input" name="username">
       <button id="join-btn">Login</button>
       <button id="game-btn">New game</button>
+      <button id="start-btn">Start game</button>
+      <button id="logout-btn">Log out</button>
+      <button id="quit-btn">Quit game</button>
     </div>
   </div> 
 </div>

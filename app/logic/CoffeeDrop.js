@@ -77,7 +77,7 @@ export const types = {
     "color": "white",
     "desc": "will empty the cup to the right or left"
   },
-  "dobbel_speed": {
+  "double_speed": {
     "effect": "bad",
     "color": "dont now",
     "desc": "dobble rate of tears/ or speed on cup/pot"

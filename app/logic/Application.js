@@ -29,14 +29,35 @@ export class ApplicationListener {
 
 }
 
+class Drop {
+  constructor(x, y, down) {
+    this.x = x;
+    this.y = y;
+    this.down = down;
+  }
+}
+
 class Application {
 	constructor(){
-		this.listeners = [];
+    this.listeners = [];
+    this.shots = [];
 	}
 
 	add_listener(listener) {
 		this.listeners.push(listener);
-	}
+  }
+  
+  set_server_data(data) {
+    this.coffee_cup.set_data(data["cup_pos"]);
+    this.coffee_pot.set_data(data["pot_pos"]);
+    const shots = [];
+    for (let shot of data["shots"]) {
+      shots.push(new Drop(shot["x"], shot["y"], shot["down"]));
+    }
+    for (let l of this.listeners) {
+      l.set_shots(shots);
+    }
+  }
 
   new_game() {
     this.lowest_drop = undefined;
